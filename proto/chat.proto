@@ -1,0 +1,50 @@
+syntax = "proto3";
+
+package chat;
+option go_package = "chat/chatpb";
+
+import "google/protobuf/timestamp.proto";
+
+message Message {
+  int64 id = 1;
+  string user = 2;
+  string content = 3;
+  google.protobuf.Timestamp timestamp = 4;
+}
+
+message CreateMessageRequest {
+  string user = 1;
+  string content = 2;
+}
+message CreateMessageResponse {
+  Message message = 1;
+}
+
+message EditMessageRequest {
+  int64 id = 1;
+  string user = 2;         
+  string new_content = 3;
+}
+message EditMessageResponse {
+  Message message = 1;
+}
+
+message DeleteMessageRequest {
+  int64 id = 1;
+  string user = 2;         
+}
+message DeleteMessageResponse {
+  bool success = 1;
+}
+
+message GetMessagesRequest {}
+message GetMessagesResponse {
+  repeated Message messages = 1;
+}
+
+service ChatService {
+  rpc CreateMessage(CreateMessageRequest) returns (CreateMessageResponse);
+  rpc EditMessage(EditMessageRequest)     returns (EditMessageResponse);
+  rpc DeleteMessage(DeleteMessageRequest) returns (DeleteMessageResponse);
+  rpc GetMessages(GetMessagesRequest)     returns (GetMessagesResponse);
+}
